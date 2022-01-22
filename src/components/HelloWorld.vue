@@ -39,6 +39,9 @@
 </template>
 
 <script>
+import fail from '../assets/MP_Metal Clang.mp3'
+import finish from '../assets/MP_통화 종료음.mp3'
+
 export default {
   data() {
     return {
@@ -52,7 +55,8 @@ export default {
       color: ['#FFAF75', '#FF2222', '#FFCB11', '#6C431D', '#42CC36', '#548812'],
       score: 0,
       timerFunc: null,
-      start: false
+      start: false,
+      fail
     }
   },
   methods: {
@@ -61,6 +65,8 @@ export default {
         this.time.value -= 100
         if(this.time.value <= 0) {
           clearInterval(this.timerFunc)
+          let audio = new Audio(finish)
+          audio.play()
           this.time.max = 10000
           this.time.value = 10000
           this.start = false
@@ -73,6 +79,8 @@ export default {
       if(ingredients == this.order[this.dish.lastIndexOf(ingredients)]) {
         this.score += 100
       } else {
+        let audio = new Audio(fail)
+        audio.play()
         this.newOrder()
         this.dish = []
       }
