@@ -91,6 +91,7 @@ export default {
       }
     },
     myDish(event) {
+      console.log(event)
       if(this.start == false) {
         this.score = 0
         this.start = true
