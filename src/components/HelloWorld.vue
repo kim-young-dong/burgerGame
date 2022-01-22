@@ -17,6 +17,7 @@
     </div>
     <div class="dish">
       <div v-if="!start">키보드를 누르면 시작합니다.</div>
+      <div v-if="!start">목표와 동일한 모양을 만드세요</div>
       <div class="burger">
         <div v-for="(ingredients, ind) in dish"
         :key="ind"
