@@ -121,7 +121,7 @@ export default {
       }
       if(this.dish.length == 8) {
         if(this.time.max > 2000) {
-          this.time.max -= 100 
+          this.time.max -= 200 
         }
         this.time.value = this.time.max
         this.score += 1000
