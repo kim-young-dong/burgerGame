@@ -27,9 +27,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 10px;
+  padding: 10px;
   display: flex;
   justify-content: center;
   width: 100vw;
+  height: 100vh;
 }
 </style>
