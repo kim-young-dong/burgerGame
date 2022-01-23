@@ -98,7 +98,7 @@ export default {
         if(this.timer.value <= 0) {
           clearInterval(this.newOrderFunc)
           clearInterval(this.timer.timerFunc)
-          let audio = new Audio(this.finish)
+          let audio = new Audio(this.sound.finish)
           audio.play()
           this.timer.max = 10000
           this.timer.value = 10000
@@ -123,13 +123,13 @@ export default {
     scoring(ingredients) {
       let firstOrder = this.orderList[0]
       if(ingredients == firstOrder[firstOrder.length - this.dish.length]) {
-        let audio = new Audio(this.stackSound)
+        let audio = new Audio(this.sound.stackSound)
         if(this.dish.length != 8) {
           audio.play()
         }
         this.score += 10
       } else {
-        let audio = new Audio(this.fail)
+        let audio = new Audio(this.sound.fail)
         audio.play()
         this.dish = []
         this.orderList.splice(0, 1)
@@ -181,7 +181,7 @@ export default {
         }
         this.timer.value = this.timer.max
         // 사운드
-        let audio = new Audio(this.wellDone)
+        let audio = new Audio(this.sound.wellDone)
         audio.play()
         // 점수
         this.cookedBurger.count += 1
