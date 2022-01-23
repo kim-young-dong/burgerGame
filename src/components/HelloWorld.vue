@@ -51,10 +51,10 @@
 </template>
 
 <script>
-import fail from '@/assets/MP_Fail.mp3'
-import finish from '@/assets/MP_GameOver.mp3'
-import stackSound from '@/assets/MP_Stack.mp3'
-import wellDone from '@/assets/MP_WellDone.mp3'
+import fail from '../assets/MP_Fail.mp3'
+import finish from '../assets/MP_GameOver.mp3'
+import stackSound from '../assets/MP_Stack.mp3'
+import wellDone from '../assets/MP_WellDone.mp3'
 
 export default {
   data() {
@@ -76,7 +76,13 @@ export default {
         timerFunc: null,
         max: 10000,
         value: 10000
-      },      
+      },  
+      sound: {
+        fail,
+        finish,
+        stackSound,
+        wellDone
+      }    
     }
   },
 
@@ -92,7 +98,7 @@ export default {
         if(this.timer.value <= 0) {
           clearInterval(this.newOrderFunc)
           clearInterval(this.timer.timerFunc)
-          let audio = new Audio(finish)
+          let audio = new Audio(this.finish)
           audio.play()
           this.timer.max = 10000
           this.timer.value = 10000
@@ -117,13 +123,13 @@ export default {
     scoring(ingredients) {
       let firstOrder = this.orderList[0]
       if(ingredients == firstOrder[firstOrder.length - this.dish.length]) {
-        let audio = new Audio(stackSound)
+        let audio = new Audio(this.stackSound)
         if(this.dish.length != 8) {
           audio.play()
         }
         this.score += 10
       } else {
-        let audio = new Audio(fail)
+        let audio = new Audio(this.fail)
         audio.play()
         this.dish = []
         this.orderList.splice(0, 1)
@@ -175,7 +181,7 @@ export default {
         }
         this.timer.value = this.timer.max
         // 사운드
-        let audio = new Audio(wellDone)
+        let audio = new Audio(this.wellDone)
         audio.play()
         // 점수
         this.cookedBurger.count += 1
