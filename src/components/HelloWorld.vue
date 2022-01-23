@@ -1,5 +1,6 @@
 <template>
   <div class="content" >
+    <img src="@/assets/logo.png" alt="">
     <div class="orderList">
       <div class="order" v-for="(menu, ind) in orderList"
       :key="ind">
