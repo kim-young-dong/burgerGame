@@ -53,6 +53,8 @@
 <script>
 import fail from '../assets/MP_Metal Clang.mp3'
 import finish from '../assets/MP_통화 종료음.mp3'
+import stackSound from '../assets/MP_swipe-whoosh.mp3'
+import wellDone from '../assets/MP_Pling.mp3'
 
 export default {
   data() {
@@ -115,6 +117,10 @@ export default {
     scoring(ingredients) {
       let firstOrder = this.orderList[0]
       if(ingredients == firstOrder[firstOrder.length - this.dish.length]) {
+        let audio = new Audio(stackSound)
+        if(this.dish.length != 8) {
+          audio.play()
+        }
         this.score += 10
       } else {
         let audio = new Audio(fail)
@@ -168,6 +174,9 @@ export default {
           this.timer.max -= 200 
         }
         this.timer.value = this.timer.max
+        // 사운드
+        let audio = new Audio(wellDone)
+        audio.play()
         // 점수
         this.cookedBurger.count += 1
         this.cookedBurger.list.push(this.dish)
@@ -196,16 +205,17 @@ export default {
 .content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 100%;
 }
 @keyframes stackBurger{
   from {
-    transform: translateY(-100px);
+    transform: translateX(-100px);
   }
   to {
-    transform: translateY(0px);
+    transform: translateX(0px);
   }
 }
 /* 재료 */
@@ -219,10 +229,11 @@ export default {
   height: 30px;
   background-color: #000;
 }
-.burger div:nth-child(n) {
+.stack1, .stack2, .stack3, .stack4, .stack5, .stack6, .stack7, .stack8    {
   animation-name: stackBurger;
   animation-duration: 1s;
-  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-timing-function: 
+  cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 progress {
   width: 200px;
@@ -239,7 +250,7 @@ progress {
   justify-content: space-around;
   align-items: center;
   width: 300px;
-  height: 400px;
+  height: 320px;
 }
 /* 점수 */ 
 .score {
@@ -260,7 +271,7 @@ progress {
   justify-content: space-around;
   align-items: center;
   width: 300px;
-  height: 400px;
+  height: 320px;
 }
 
 /* 키 설명 */
