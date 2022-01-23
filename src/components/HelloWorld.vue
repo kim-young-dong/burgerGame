@@ -51,10 +51,10 @@
 </template>
 
 <script>
-import fail from '../assets/MP_Metal Clang.mp3'
-import finish from '../assets/MP_통화 종료음.mp3'
-import stackSound from '../assets/MP_swipe-whoosh.mp3'
-import wellDone from '../assets/MP_Pling.mp3'
+import fail from '../assets/MP_Fail.mp3'
+import finish from '../assets/MP_GameOver.mp3'
+import stackSound from '../assets/MP_Stack.mp3'
+import wellDone from '../assets/MP_WellDone.mp3'
 
 export default {
   data() {
