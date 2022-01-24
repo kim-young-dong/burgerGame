@@ -1,34 +1,49 @@
 <template>
   <div class="content" >
+    <div class="information">
+      <div class="score">
+        <div>
+          {{ score }} 점
+        </div>
+        <div>
+          {{ cookedBurger.count }} 개 완성
+        </div>
+      </div>
+      <progress :value="timer.value" min="0" :max="timer.max"></progress>
+    </div>
     <div class="orderList">
-      <div class="order" v-for="(menu, ind) in orderList"
-      :key="ind">
+      <div class="order first">
         <div class="burger">
-          <div v-for="(ingredients, ind) in menu"
+          <div v-for="(ingredients, ind) in orderList[0]"
           :key="ind"
           :style="{backgroundColor: color[ingredients]}"/>
         </div>
       </div>
-    </div>
-    <div class="score">
-      <div>
-        {{ score }} 점
+      <div class="order second">
+        <div class="burger">
+          <div v-for="(ingredients, ind) in orderList[1]"
+          :key="ind"
+          :style="{backgroundColor: color[ingredients]}"/>
+        </div>
       </div>
-      <div>
-        {{ cookedBurger.count }} 개 완성
+      <div class="order third">
+        <div class="burger">
+          <div v-for="(ingredients, ind) in orderList[2]"
+          :key="ind"
+          :style="{backgroundColor: color[ingredients]}"/>
+        </div>
       </div>
-    </div>
-    <progress :value="timer.value" min="0" :max="timer.max"></progress>
-    <div class="timer">
-
     </div>
     <div class="dish">
       <div v-if="!start">
         <div>주문과 동일한 메뉴가 되도록</div>
         <div>재료를 쌓으세요.</div>
       </div>
-      <div v-if="!start">키보드를 누르면 시작합니다.</div>
-      <div class="burger">
+      <div>
+        <div v-if="!start">키보드를 누르거나</div>
+        <div v-if="!start">버튼을 클릭하면 시작합니다.</div>
+      </div>
+      <div class="burger" v-if="start">
         <div v-for="(ingredients, ind) in dish"
         :class="ind == 0 ? 'stack' : ''"
         :key="ind"
@@ -37,14 +52,14 @@
     </div>
     <div class="keyWrap">
       <div class="key">
-        <div style="backgroundColor: #FFAF75">Q</div>
-        <div style="backgroundColor: #FF2222">W</div>
-        <div style="backgroundColor: #FFCB11">E</div>
+        <div style="backgroundColor: #FFAF75" @click="myDish({keyCode: 81})">Q</div>
+        <div style="backgroundColor: #FF2222" @click="myDish({keyCode: 87})">W</div>
+        <div style="backgroundColor: #FFCB11" @click="myDish({keyCode: 69})">E</div>
       </div>
       <div class="key">
-        <div style="backgroundColor: #6C431D">A</div>
-        <div style="backgroundColor: #42CC36">S</div>
-        <div style="backgroundColor: #548812">D</div>
+        <div style="backgroundColor: #6C431D" @click="myDish({keyCode: 65})">A</div>
+        <div style="backgroundColor: #42CC36" @click="myDish({keyCode: 83})">S</div>
+        <div style="backgroundColor: #548812" @click="myDish({keyCode: 68})">D</div>
       </div>
     </div>
   </div>
@@ -116,7 +131,7 @@ export default {
         newOrder.push(Math.floor(Math.random() * 6))
         n += 1
       }
-      if(this.orderList.length < 5) {
+      if(this.orderList.length < 3) {
         this.orderList.push(newOrder)
       }
     },    
@@ -194,7 +209,10 @@ export default {
         }
         this.dish = []
       }
-    }
+    },
+    keyQ(event) {
+      console.log(event)
+    },
   },
   created() {
     document.addEventListener('keydown', this.myDish)
@@ -213,71 +231,69 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  max-width: 340px;
   width: 100%;
   height: 100%;
 }
-@keyframes stackBurger{
-  from {
-    transform: translateX(-100px);
-  }
-  to {
-    transform: translateX(0px);
-  }
-}
-/* 재료 */
-.burger {
+/* 점수, 시간 */ 
+.information {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.burger div{
-  width: 200px;
-  height: 30px;
-  background-color: #000;
-}
-.stack1, .stack2, .stack3, .stack4, .stack5, .stack6, .stack7, .stack8    {
-  animation-name: stackBurger;
-  animation-duration: 1s;
-  animation-timing-function: 
-  cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-progress {
-  width: 200px;
-  height: 20px;
-}
-/* 주문 */
-.orderList {
-  display: flex;
-  gap: 20px;
-}
-.order {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
   align-items: center;
-  width: 300px;
-  height: 320px;
+  width: 100%;
 }
-/* 점수 */ 
 .score {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  width: 300px;
+  justify-content: space-between;
+  width: 100px;
+  height: 50px;
 }
 .score div {
   font-size: 16px;
   font-weight: bold;
   font-family:'Courier New', Courier, monospace;
 }
-/* 접시 */
+progress {
+  width: calc(100% - 100px);
+  height: 30px;
+}
+/* burger */
+.burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.burger div{
+  width: 100px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #000;
+}
+/* order,dish */
+.orderList {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+  height: 230px;
+}
+.order {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100px;
+  height: 100%;
+}
 .dish {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  width: 300px;
-  height: 320px;
+  width: 100%;
+  height: 230px;
 }
 
 /* 키 설명 */
@@ -286,7 +302,7 @@ progress {
   flex-direction: column;
   justify-content: space-evenly;
   gap: 10px;
-  width: 300px;
+  width: 100%;
 }
 .key {
   display: flex;
