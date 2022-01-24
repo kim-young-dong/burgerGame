@@ -1,5 +1,6 @@
-### burgerGame - https://dev6238.dg51rpnbylndf.amplifyapp.com/
+### burgerGame
 #### 프로젝트 기간 : 2022-01-22 ~ 2022-01-23
+#### 링크 : https://dev6238.dg51rpnbylndf.amplifyapp.com/
 #### 소개
 - 주어진 주문서와 동일한 모양이 되도록 키보드를 눌러 재료를 쌓는 게임
 - 주문서에 맞게 완성할 수록 주어지는 시간이 점점 줄어든다.
