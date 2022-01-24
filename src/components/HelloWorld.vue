@@ -135,9 +135,19 @@ export default {
         this.orderList.push(newOrder)
       }
     },    
-    scoring(ingredients) {
+    stackBurger() {
+      let target = document.querySelector('.dish .burger .stack')
+      if(target) {
+        target.animate([
+            {transform: 'translateY(-100px)'},
+            {transform: 'translateY(0px)'}
+        ], 100)
+      }
+    },
+    async scoring(ingredients) {
       let firstOrder = this.orderList[0]
       if(ingredients == firstOrder[firstOrder.length - this.dish.length]) {
+        this.stackBurger()
         let audio = new Audio(this.sound.stackSound)
         if(this.dish.length != 8) {
           audio.play()
@@ -265,11 +275,23 @@ progress {
   align-items: center;
   gap: 5px;
 }
-.burger div{
+.burger div {
   width: 100px;
   height: 10px;
   border-radius: 5px;
   background-color: #000;
+}
+@keyframes stackAnimation {
+  from {
+    transform: translateY(-100px)
+  }
+  to {
+    transform: translateY(0px)
+  }
+}
+.dish .burger .stack {
+  animation-name: stackAnimation;
+  animation-duration: 0.1s;
 }
 /* order,dish */
 .orderList {
