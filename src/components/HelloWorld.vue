@@ -235,7 +235,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 .content {
   display: flex;
   flex-direction: column;
@@ -257,11 +257,11 @@ export default {
   justify-content: space-between;
   width: 100px;
   height: 50px;
-}
-.score div {
-  font-size: 16px;
-  font-weight: bold;
-  font-family:'Courier New', Courier, monospace;
+  div {
+    font-size: 16px;
+    font-weight: bold;
+    font-family:'Courier New', Courier, monospace;
+  }
 }
 progress {
   width: calc(100% - 100px);
@@ -274,12 +274,12 @@ progress {
   justify-content: center;
   align-items: center;
   gap: 5px;
-}
-.burger div {
-  width: 100px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: #000;
+  div {
+    width: 100px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #000;
+  }
 }
 @keyframes stackAnimation {
   from {
@@ -289,10 +289,21 @@ progress {
     transform: translateY(0px)
   }
 }
-.dish .burger .stack {
-  animation-name: stackAnimation;
-  animation-duration: 0.1s;
+.dish {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 230px;
+  .burger {
+    .stack {
+      animation-name: stackAnimation;
+      animation-duration: 0.1s;
+    }
+  }
 }
+
 /* order,dish */
 .orderList {
   display: flex;
@@ -309,14 +320,6 @@ progress {
   width: 100px;
   height: 100%;
 }
-.dish {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-  height: 230px;
-}
 
 /* 키 설명 */
 .keyWrap {
@@ -330,14 +333,14 @@ progress {
   display: flex;
   justify-content: center;
   gap: 10px;
-}
-.key div {
-  background-color: #ffb0a6;
-  color: #fff;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  border-radius: 10px;
+  div {
+    background-color: #ffb0a6;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 10px;
+  }
 }
 
 </style>
