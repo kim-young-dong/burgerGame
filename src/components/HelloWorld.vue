@@ -1,15 +1,20 @@
 <template>
   <div class="content" >
     <div class="information">
+      <div class="time">
+        <div>시간</div>
+        <div>{{ timer.value[0] + ':' + timer.value[1] + timer.value[2] }}</div>
+      </div>
       <div class="score">
         <div>
-          {{ score }} 점
+          <div>점수</div>
+          <div>{{ score }}</div>
         </div>
         <div>
-          {{ cookedBurger.count }} 개 완성
+          <div>완성</div>
+          <div>{{ cookedBurger.count }}</div>
         </div>
       </div>
-      <progress :value="timer.value" min="0" :max="timer.max"></progress>
     </div>
     <div class="orderList">
       <div class="order first">
@@ -35,14 +40,6 @@
       </div>
     </div>
     <div class="dish">
-      <div v-if="!start">
-        <div>주문과 동일한 메뉴가 되도록</div>
-        <div>재료를 쌓으세요.</div>
-      </div>
-      <div>
-        <div v-if="!start">키보드를 누르거나</div>
-        <div v-if="!start">버튼을 클릭하면 시작합니다.</div>
-      </div>
       <div class="burger" v-if="start">
         <div v-for="(ingredients, ind) in dish"
         :class="ind == 0 ? 'stack' : ''"
@@ -52,14 +49,24 @@
     </div>
     <div class="keyWrap">
       <div class="key">
-        <div style="backgroundColor: #FFAF75" @click="myDish({keyCode: 81})">Q</div>
-        <div style="backgroundColor: #FF2222" @click="myDish({keyCode: 87})">W</div>
-        <div style="backgroundColor: #FFCB11" @click="myDish({keyCode: 69})">E</div>
-      </div>
-      <div class="key">
-        <div style="backgroundColor: #6C431D" @click="myDish({keyCode: 65})">A</div>
-        <div style="backgroundColor: #42CC36" @click="myDish({keyCode: 83})">S</div>
-        <div style="backgroundColor: #548812" @click="myDish({keyCode: 68})">D</div>
+        <div :style="{backgroundColor: '#FFAF75', 
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}" 
+        @click="myDish({keyCode: 81})">Q</div>
+        <div :style="{backgroundColor: '#FF2222', 
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}" 
+        @click="myDish({keyCode: 87})">W</div>
+        <div :style="{backgroundColor: '#FFCB11', 
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}" 
+        @click="myDish({keyCode: 69})">E</div>
+        <div :style="{backgroundColor: '#6C431D',
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}" 
+        @click="myDish({keyCode: 65})">A</div>
+        <div :style="{backgroundColor: '#42CC36',
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}" 
+        @click="myDish({keyCode: 83})">S</div>
+        <div :style="{backgroundColor: '#548812',
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}" 
+        @click="myDish({keyCode: 68})">D</div>
       </div>
     </div>
   </div>
@@ -90,7 +97,8 @@ export default {
       timer: {
         timerFunc: null,
         max: 10000,
-        value: 10000
+        now: 10000,
+        value: [0, 0, 0, 0]
       },  
       sound: {
         fail,
@@ -109,21 +117,33 @@ export default {
       }, 3000)
       // 타이머
       this.timer.timerFunc = setInterval(() => {
-        this.timer.value -= 100
-        if(this.timer.value <= 0) {
+        this.timer.now -= 10
+        let nowTime = this.timer.now
+        nowTime += ''
+
+        if(nowTime.split('').length != 4) {
+          this.timer.value = nowTime.split('')
+          this.timer.value.unshift(0)
+        } else {
+          this.timer.value = nowTime.split('')
+        }
+
+        if(this.timer.now <= 0) {
           clearInterval(this.newOrderFunc)
           clearInterval(this.timer.timerFunc)
           let audio = new Audio(this.sound.finish)
           audio.play()
           this.timer.max = 10000
-          this.timer.value = 10000
+          this.timer.now = 10000
+          this.timer.value = [0, 0, 0]
           this.start = false
           this.dish = []
           this.orderList = []
           this.newOrder()
         }
-      }, 100)
+      }, 10)
     },
+
     newOrder() {
       let n = 0 
       let newOrder = []
@@ -134,7 +154,8 @@ export default {
       if(this.orderList.length < 3) {
         this.orderList.push(newOrder)
       }
-    },    
+    },  
+
     stackBurger() {
       let target = document.querySelector('.dish .burger .stack')
       if(target) {
@@ -144,6 +165,7 @@ export default {
         ], 100)
       }
     },
+
     async scoring(ingredients) {
       let firstOrder = this.orderList[0]
       if(ingredients == firstOrder[firstOrder.length - this.dish.length]) {
@@ -161,6 +183,7 @@ export default {
         this.newOrder()
       }
     },
+
     myDish(event) {
       if(this.start == false) {
         this.score = 0
@@ -211,7 +234,7 @@ export default {
         // 점수
         this.cookedBurger.count += 1
         this.cookedBurger.list.push(this.dish)
-        this.score += 1000
+        this.score += 200
         // 초기화
         this.orderList.splice(0, 1)
         if(this.orderList.length == 0) {
@@ -220,10 +243,8 @@ export default {
         this.dish = []
       }
     },
-    keyQ(event) {
-      console.log(event)
-    },
   },
+
   created() {
     document.addEventListener('keydown', this.myDish)
     this.newOrder()
@@ -238,35 +259,74 @@ export default {
 <style lang="scss" scoped>
 .content {
   display: flex;
+  gap: 15px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  max-width: 340px;
+  max-width: 360px;
   width: 100%;
   height: 100%;
 }
+
 /* 점수, 시간 */ 
 .information {
   display: flex;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
-}
-.score {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100px;
-  height: 50px;
-  div {
-    font-size: 16px;
-    font-weight: bold;
-    font-family:'Courier New', Courier, monospace;
+
+  .time {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 80px;
+    height: 80px;
+    font-size: 18px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 20px rgba(255, 56, 74, 0.5);
+    border-radius: 15px;
+    div {
+      width: 100%;
+      height: 50px;
+      line-height: 50px;
+    }
+    div:first-child {
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+    }
+  }
+  .score {
+    display: flex;
+    justify-content: space-evenly;
+    width: 200px;
+    height: 80px;
+    > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 80px;
+      height: 80px;
+      font-size: 18px;
+      background: #FFFFFF;
+      box-shadow: 0px 4px 20px rgba(255, 56, 74, 0.5);
+      border-radius: 15px;
+      div {
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+      }
+      div:first-child {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+      }
+    }
   }
 }
-progress {
-  width: calc(100% - 100px);
-  height: 30px;
-}
+
 /* burger */
 .burger {
   display: flex;
@@ -281,6 +341,26 @@ progress {
     background-color: #000;
   }
 }
+
+/* order,dish */
+.orderList {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  height: 180px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 20px rgba(255, 56, 74, 0.5);
+  border-radius: 15px;
+}
+.order {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100px;
+  height: 100%;
+}
+
 @keyframes stackAnimation {
   from {
     transform: translateY(-100px)
@@ -294,8 +374,11 @@ progress {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 20px rgba(255, 56, 74, 0.5);
+  border-radius: 15px;
   width: 100%;
-  height: 230px;
+  height: 180px;
   .burger {
     .stack {
       animation-name: stackAnimation;
@@ -304,35 +387,12 @@ progress {
   }
 }
 
-/* order,dish */
-.orderList {
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
-  width: 100%;
-  height: 230px;
-}
-.order {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  width: 100px;
-  height: 100%;
-}
-
 /* 키 설명 */
-.keyWrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  gap: 10px;
-  width: 100%;
-}
 .key {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
+  width: 100%;
   div {
     background-color: #ffb0a6;
     color: #fff;
